@@ -1,0 +1,28 @@
+diff --git a/meta-gnome/recipes-gnome/gdm/gdm_46.0.bb b/meta-gnome/recipes-gnome/gdm/gdm_46.0.bb
+index 469281624c..db1f5ff788 100644
+--- a/meta-gnome/recipes-gnome/gdm/gdm_46.0.bb
++++ b/meta-gnome/recipes-gnome/gdm/gdm_46.0.bb
+@@ -12,6 +12,7 @@ DEPENDS = " \
+     libgudev \
+     libpam \
+     xserver-xorg \
++    json-glib \
+ "
+ 
+ REQUIRED_DISTRO_FEATURES = "x11 systemd pam polkit gobject-introspection-data"
+diff --git a/meta-oe/recipes-security/audit/audit_4.0.1.bb b/meta-oe/recipes-security/audit/audit_4.0.1.bb
+index a37ae3bb84..f538b017d9 100644
+--- a/meta-oe/recipes-security/audit/audit_4.0.1.bb
++++ b/meta-oe/recipes-security/audit/audit_4.0.1.bb
+@@ -95,7 +95,10 @@ do_install:append() {
+ 
+     if ${@bb.utils.contains('DISTRO_FEATURES', 'sysvinit', 'true', 'false', d)}; then
+         install -D -m 0755 ${WORKDIR}/auditd ${D}/etc/init.d/auditd
+-        rm -rf ${D}${libdir}/systemd
++
++        if ! ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'true', 'false', d)}; then
++            rm -rf ${D}${libdir}/systemd
++        fi
+     fi
+ 
+     # Create /var/spool/audit directory for audisp-remote

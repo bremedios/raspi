@@ -3,7 +3,8 @@
 # Current Release: walnascar
 # Current LTS:     scarthgap
 YOCTO_RELEASE=scarthgap
-YOCTO_FOLDER=poky-pinkraspi
+YOCTO_PLATFORM=qemux86-64
+YOCTO_FOLDER=raspi-$YOCTO_RELEASE-$YOCTO_PLATFORM
 
 SCRIPT_PATH=`pwd`
 
@@ -24,6 +25,10 @@ fi
 
 if [ ! -d "meta-openembedded" ]; then
 	git clone -b $YOCTO_RELEASE git://git.openembedded.org/meta-openembedded
+
+	cd meta-openembedded
+	patch -p1 < ../../meta-openembedded.patch
+	cd $YOCTO_PATH
 fi
 
 if [ ! -d "meta-pinkraspi" ]; then
