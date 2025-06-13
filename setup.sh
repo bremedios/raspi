@@ -14,25 +14,27 @@ YOCTO_PATH=$SCRIPT_PATH/$YOCTO_FOLDER
 #   Clone any repos that are missing
 #
 if [ ! -d "$YOCTO_PATH" ]; then
-	git clone -b $YOCTO_RELEASE https://git.yoctoproject.org/poky $YOCTO_FOLDER
+    git clone -b $YOCTO_RELEASE https://git.yoctoproject.org/poky $YOCTO_FOLDER
 fi
 
 cd $YOCTO_PATH
 
 if [ ! -d "meta-raspberrypi" ]; then
-	git clone -b $YOCTO_RELEASE https://github.com/agherzan/meta-raspberrypi
+    git clone -b $YOCTO_RELEASE https://github.com/agherzan/meta-raspberrypi
 fi
 
 if [ ! -d "meta-openembedded" ]; then
-	git clone -b $YOCTO_RELEASE git://git.openembedded.org/meta-openembedded
+    git clone -b $YOCTO_RELEASE git://git.openembedded.org/meta-openembedded
 
-	cd meta-openembedded
-	patch -p1 < ../../meta-openembedded.patch
-	cd $YOCTO_PATH
+    if [ -f "../patches/$YOCTO_RELEASE-meta-openembedded.patch" ] ; then
+        cd meta-openembedded
+        patch -p1 < ../../$YOCTO_RELEASE-meta-openembedded.patch
+        cd $YOCTO_PATH
+    fi
 fi
 
 if [ ! -d "meta-pinkraspi" ]; then
-	git clone -b $YOCTO_RELEASE git@github.com:bremedios/meta-pinkraspi.git
+    git clone -b $YOCTO_RELEASE git@github.com:bremedios/meta-pinkraspi.git
 fi
 
 cd $YOCTO_PATH
